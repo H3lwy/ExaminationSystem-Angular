@@ -1,0 +1,72 @@
+<div class="questions-wrapper">
+    <app-header [title]="'Questions Management'" [subtitle]="'Manage your exam questions'" 
+    [icon]="'question-circle'"
+    [buttons]="[
+            { label: 'Add New Question', icon: 'plus-circle', action: 'addQuestion' },
+            { label: 'Back to Dashboard', icon: 'arrow-left', action: 'goToDashboard' }
+        ]" (buttonClick)="onHeaderAction($event)">
+    </app-header>
+
+    <div class="loading-state" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Loading questions...</p>
+    </div>
+
+    <div class="questions-container" *ngIf="!isLoading">
+        <div class="empty-state" *ngIf="questions.length === 0">
+            <i class="fas fa-question"></i>
+            <p>No questions available</p>
+            <p class="secondary-text">Click the Add button to create your first question</p>
+        </div>
+
+        <div class="questions-grid" *ngIf="questions.length > 0">
+            <div class="question-card" *ngFor="let question of questions">
+                <div class="question-header">
+                    <div class="meta-info">
+                        <span class="subject">{{ question.SubjectName }}</span>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-icon edit" (click)="editQuestion(question.QuestionId)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-icon delete" (click)="deleteQuestion(question.QuestionId)">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="question-content">
+                    {{ question.QuestionText }}
+                </div>
+                <div class="choices-list">
+                    <div class="choice-item" *ngFor="let choice of question.Choices">
+                        <i class="fas" [class.fa-check-circle]="choice.isCorrect"
+                            [class.fa-circle]="!choice.isCorrect"></i>
+                        {{ choice.choiceText }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination-container" *ngIf="questions.length > 0">
+            <div class="pagination">
+                <button class="pagination-btn" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+                    <i class="fas fa-chevron-left"></i>
+                    Previous
+                </button>
+        
+                <div class="pagination-numbers">
+                    <button class="page-number" *ngFor="let page of getPageArray()" [class.active]="page === currentPage"
+                        (click)="changePage(page)">
+                        {{ page }}
+                    </button>
+                </div>
+        
+                <button class="pagination-btn" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+                    Next
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        
+    </div>
+</div>

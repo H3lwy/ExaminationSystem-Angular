@@ -1,0 +1,43 @@
+<div class="edit-wrapper">
+    <app-header [title]="'Edit Subject'" [subtitle]="'Update subject information'" 
+    [icon]="'fas fa-edit'"
+    [buttons]="[
+            { label: 'Back to Subjects', icon: 'arrow-left', action: 'gotoSubjects' }
+        ]" (buttonClick)="onHeaderAction($event)">
+    </app-header>
+
+    <div class="error-message" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ errorMessage }}
+        <button class="close-error" (click)="errorMessage = null">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="form-container">
+        <form (ngSubmit)="updateSubject()" #subjectForm="ngForm">
+            <div class="form-group">
+                <label for="subjectName">Subject Name</label>
+                <input type="text" id="subjectName" name="subjectName" [(ngModel)]="subjectData.subjectName" required
+                    class="form-control" placeholder="Enter subject name">
+            </div>
+
+            <div class="form-group">
+                <label for="subjectDescription">Description</label>
+                <textarea id="subjectDescription" name="subjectDescription" [(ngModel)]="subjectData.subjectDescription"
+                    required class="form-control" rows="4" placeholder="Enter subject description"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" (click)="gotoSubjects()">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button type="submit" class="btn-primary" [disabled]="!subjectForm.form.valid">
+                    <i class="fas fa-save"></i>
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

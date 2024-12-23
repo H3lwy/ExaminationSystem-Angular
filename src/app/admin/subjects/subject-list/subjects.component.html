@@ -1,0 +1,59 @@
+<div class="subjects-wrapper">
+    <app-header [title]="'Subjects Management'" [subtitle]="'Manage and organize your academic subjects'" 
+    [icon]="'book-open'"
+    [buttons]="[
+            { label: 'Add Subject', icon: 'plus-circle', action: 'addsubject' },
+            { label: 'Back to Dashboard', icon: 'arrow-left', action: 'goToDashboard' }
+        ]" (buttonClick)="onHeaderAction($event)">
+    </app-header>
+
+    <div class="error-message" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ errorMessage }}
+        <button class="close-error" (click)="errorMessage = null">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="table-container" @if(subjects.length > 0)>
+        <table class="subjects-table">
+            <thead>
+                <tr>
+                    <th><i class="fas fa-hashtag"></i> ID</th>
+                    <th><i class="fas fa-book"></i> Subject Name</th>
+                    <th><i class="fas fa-align-left"></i> Description</th>
+                    <th><i class="fas fa-cog"></i> Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(subject of subjects; track subject.subjectId){
+                <tr>
+                    <!-- <td>{{ i + 1 }}</td> -->
+                    <td>{{ subject.subjectName }}</td>
+                    <td class="description-cell">{{ subject.subjectDescription }}</td>
+                    <td class="actions">
+                        <button class="btn-action history" (click)="viewExamHistory(subject.subjectId)">
+                            <i class="fas fa-history"></i>
+                            History
+                        </button>
+                        <button class="btn-action edit" (click)="editSubject(subject.subjectId)">
+                            <i class="fas fa-edit"></i>
+                            Edit
+                        </button>
+                        <button class="btn-action delete" (click)="deleteSubject(subject.subjectId)">
+                            <i class="fas fa-trash-alt"></i>
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="empty-state" *ngIf="subjects.length === 0 && !errorMessage">
+        <i class="fas fa-books"></i>
+        <p>No subjects available</p>
+        <p class="secondary-text">Click the Add button to create your first subject</p>
+    </div>
+</div>

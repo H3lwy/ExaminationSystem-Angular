@@ -1,0 +1,59 @@
+<div class="history-wrapper">
+    <app-header [title]="'Subject Exam History'" [subtitle]="'View exam performance records for this subject'"
+        [icon]="'history'" [buttons]="[
+            { label: 'Back to Subjects', icon: 'arrow-left', action: 'back' }
+        ]" (buttonClick)="onHeaderAction($event)">
+    </app-header>
+
+    <div class="error-message" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ errorMessage }}
+        <button class="close-error" (click)="errorMessage = null">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <ng-container>
+        <div class="empty-state" *ngIf="examHistories.length === 0">
+            <i class="fas fa-history"></i>
+            <p>No exam history available</p>
+            <p class="secondary-text">No students have taken exams for this subject yet</p>
+        </div>
+
+        <div class="table-container" *ngIf="examHistories.length > 0">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-user"></i> Student Name</th>
+                        <th><i class="fas fa-file-alt"></i> Exam Name</th>
+                        <th><i class="fas fa-calendar"></i> Date Taken</th>
+                        <th><i class="fas fa-check"></i> Score</th>
+                        <th><i class="fas fa-percentage"></i> Pass Score</th>
+                        <th><i class="fas fa-flag"></i> Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let history of examHistories">
+                        <td>{{ history.studentName }}</td>
+                        <td>{{ history.examName }}</td>
+                        <td>{{ history.dateTimeTaken | date:'medium' }}</td>
+                        <td>
+                            <span class="score-badge" [class.high-score]="history.score >= 90"
+                                [class.medium-score]="history.score >= history.passScore && history.score < 90"
+                                [class.low-score]="history.score < history.passScore">
+                                {{ history.score }}%
+                            </span>
+                        </td>
+                        <td>{{ history.passScore }}%</td>
+                        <td>
+                            <span class="status-badge" [class.passed]="history.score >= history.passScore"
+                                [class.failed]="history.score < history.passScore">
+                                {{ history.score >= history.passScore ? 'PASSED' : 'FAILED' }}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
+</div>

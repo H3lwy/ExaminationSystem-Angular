@@ -1,0 +1,63 @@
+<div class="exams-wrapper">
+    <app-header [title]="'Exams Management'" [subtitle]="'Manage and organize your exams'" 
+    [icon]="'file-alt'"
+    [buttons]="[
+            { label: 'Add New Exam', icon: 'plus-circle', action: 'addExam' },
+            { label: 'Back to Dashboard', icon: 'arrow-left', action: 'back' }
+        ]" (buttonClick)="onHeaderAction($event)">
+    </app-header>
+
+    <div class="table-container" *ngIf="exams.length > 0">
+        <table class="exams-table">
+            <thead>
+                <tr>
+                    <th><i class="fas fa-hashtag"></i> ID</th>
+                    <th><i class="fas fa-file-alt"></i> Exam Name</th>
+                    <th><i class="fas fa-book"></i> Subject</th>
+                    <th><i class="fas fa-clock"></i> Time Limit</th>
+                    <th><i class="fas fa-percent"></i> Pass Score</th>
+                    <th><i class="fas fa-cog"></i> Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let exam of exams; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ exam.examName }}</td>
+                    <td>{{ exam.subjectName }}</td>
+                    <td>{{ exam.timeLimit }}</td>
+                    <td>{{ exam.passScore }}%</td>
+                    <td class="actions">
+                        <button class="btn-action edit" (click)="onEditExam(exam)">
+                            <i class="fas fa-edit"></i>
+                            Edit
+                        </button>
+                        <button class="btn-action delete" (click)="onDeleteExam(exam.examId)">
+                            <i class="fas fa-trash-alt"></i>
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination" *ngIf="totalPages > 1">
+        <button class="btn-page" [disabled]="currentPage === 1" (click)="loadExams(currentPage - 1)">
+            <i class="fas fa-chevron-left"></i>
+            Previous
+        </button>
+        <span class="page-info">
+            Page {{ currentPage }} of {{ totalPages }}
+        </span>
+        <button class="btn-page" [disabled]="currentPage === totalPages" (click)="loadExams(currentPage + 1)">
+            Next
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <div class="empty-state" *ngIf="exams.length === 0">
+        <i class="fas fa-file-alt"></i>
+        <p>No exams available</p>
+        <p class="secondary-text">Click the Add button to create your first exam</p>
+    </div>
+</div>

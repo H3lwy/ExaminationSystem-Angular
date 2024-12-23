@@ -1,0 +1,62 @@
+<div class="register-wrapper">
+    <div class="register-card">
+        <div class="register-header">
+            <img src="/png.png" alt="Logo" class="logo">
+            <h1>Create Account</h1>
+            <p>Fill in your information to get started</p>
+        </div>
+
+        <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" [(ngModel)]="registerData.firstName" required
+                        class="form-control" placeholder="Enter your first name">
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" [(ngModel)]="registerData.lastName" required
+                        class="form-control" placeholder="Enter your last name">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" [(ngModel)]="registerData.email" required
+                        class="form-control" placeholder="Enter your email address">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="userName">Username</label>
+                    <input type="text" id="userName" name="userName" [(ngModel)]="registerData.userName" required
+                        class="form-control" placeholder="Choose a username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" [(ngModel)]="registerData.password" required
+                        class="form-control" placeholder="Create a strong password">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword"
+                        [(ngModel)]="registerData.confirmPassword" required class="form-control"
+                        placeholder="Repeat your password">
+                </div>
+            </div>
+
+            <div *ngIf="errorMessage" class="error-message">
+                {{ errorMessage }}
+            </div>
+
+            <button type="submit" class="register-button" [disabled]="!registerForm.valid">
+                Create Account
+            </button>
+        </form>
+
+        <div class="login-prompt">
+            Already have an account? <a href="/login">Sign in</a>
+        </div>
+    </div>
+</div>

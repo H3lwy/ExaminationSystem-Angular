@@ -1,0 +1,106 @@
+<div class="dashboard-wrapper">
+    <div class="dashboard-header">
+        <div class="header-top">
+            <div class="header-actions">
+                <div class="user-info">
+                    <span>Welcome, {{ userName }}</span>
+                </div>
+                <div class="logo-section">
+                    <img src="/png.png" alt="Logo" class="logo">
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-secondary notification-btn" (click)="toggleNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-indicator" *ngIf="notifications.length > 0">
+                            {{ notifications.length }}
+                        </span>
+                    </button>
+                    <button class="btn-secondary" (click)="navigateToStudents()">
+                        <i class="fas fa-users"></i> Students
+                    </button>
+                    <button class="btn-danger" (click)="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+
+                <div class="notifications-panel" *ngIf="showNotifications">
+                    <div class="notifications-header">
+                        <h3>Notifications</h3>
+                        <button class="clear-notifications" (click)="clearNotifications()"
+                            *ngIf="notifications.length > 0">
+                            <i class="fas fa-trash-alt"></i> Clear all
+                        </button>
+                    </div>
+                    <div class="notifications-content">
+                        <div *ngIf="notifications.length === 0" class="no-notifications">
+                            <i class="fas fa-bell-slash"></i>
+                            <p>No notifications</p>
+                        </div>
+                        <div *ngFor="let notification of notifications" class="notification-item">
+                            <i class="fas fa-info-circle"></i>
+                            <p>{{ notification }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2>Admin Dashboard</h2>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon students">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Total Students</h3>
+                <p class="stat-number">{{totalStudents}}</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon exams">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Completed Exams</h3>
+                <p class="stat-number">{{completedExams}}</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon passed">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Passed Exams</h3>
+                <p class="stat-number">{{passedExams}}</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon failed">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Failed Exams</h3>
+                <p class="stat-number">{{failedExams}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-grid">
+        <button class="nav-card" (click)="navigateToSubjects()">
+            <i class="fas fa-book"></i>
+            <span>Subjects</span>
+        </button>
+        <button class="nav-card" (click)="navigateToExams()">
+            <i class="fas fa-file-alt"></i>
+            <span>Exams</span>
+        </button>
+        <button class="nav-card" (click)="navigateToQuestions()">
+            <i class="fas fa-question-circle"></i>
+            <span>Questions</span>
+        </button>
+    </div>
+</div>

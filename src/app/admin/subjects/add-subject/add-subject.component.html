@@ -1,0 +1,43 @@
+<div class="add-wrapper">
+    <app-header [title]="'Add New Subject'" [subtitle]="'Create a new Subject'" 
+    [icon]="'fas fa-plus-circle'"
+    [buttons]="[
+            { label: 'Back to Subjects', icon: 'arrow-left', action: 'gotoSubjects' }
+          ]" (buttonClick)="onHeaderAction($event)">
+    </app-header>
+
+    <div class="error-message" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ errorMessage }}
+        <button class="close-error" (click)="errorMessage = null">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="form-container">
+        <form (ngSubmit)="addSubject()" #addForm="ngForm">
+            <div class="form-group">
+                <label for="subjectName">Subject Name</label>
+                <input type="text" id="subjectName" name="subjectName" [(ngModel)]="newSubject.subjectName" required
+                    class="form-control" placeholder="Enter subject name">
+            </div>
+
+            <div class="form-group">
+                <label for="subjectDescription">Description</label>
+                <textarea id="subjectDescription" name="subjectDescription" [(ngModel)]="newSubject.subjectDescription"
+                    required class="form-control" placeholder="Enter subject description" rows="4"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" (click)="gotoSubjects()">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button type="submit" class="btn-save" [disabled]="!addForm.form.valid">
+                    <i class="fas fa-plus"></i>
+                    Add Subject
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

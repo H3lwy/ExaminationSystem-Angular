@@ -1,0 +1,76 @@
+<div class="students-wrapper">
+    <app-header [title]="'Students Management'" [subtitle]="'View and manage student accounts'" 
+    [icon]="'fas fa-users'"
+    [buttons]="[
+            { label: 'Back to Dashboard', icon: 'arrow-left', action: 'back' }
+        ]" (buttonClick)="onHeaderAction($event)">
+    </app-header>
+
+    <div class="error-message" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ errorMessage }}
+        <button class="close-error" (click)="errorMessage = ''">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="loading-state" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Loading students...</p>
+    </div>
+
+    <div class="table-container" *ngIf="!isLoading && students.length > 0">
+        <table class="students-table">
+            <thead>
+                <tr>
+                    <th><i class="fas fa-user"></i> Name</th>
+                    <th><i class="fas fa-user-circle"></i> Username</th>
+                    <th><i class="fas fa-envelope"></i> Email</th>
+                    <th><i class="fas fa-toggle-on"></i> Status</th>
+                    <th> <i class="fas fa-cog"></i> Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let student of students">
+                    <td>{{ student.firstName }} {{ student.lastName }}</td>
+                    <td>{{ student.userName }}</td>
+                    <td>{{ student.email }}</td>
+                    <td>
+                        <button class="status-toggle" [class.active]="student.isActive"
+                            (click)="updateStatus(student.id, student.isActive)">
+                            {{ student.isActive ? 'Active' : 'Inactive' }}
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn-action view" (click)="viewExamHistory(student.id)">
+                            <i class="fas fa-history"></i>
+                            View History
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && students.length === 0">
+        <i class="fas fa-users"></i>
+        <p>No students found</p>
+        <p class="secondary-text">Students will appear here once registered</p>
+    </div>
+
+    <div class="pagination" *ngIf="students.length > 0">
+        <button class="btn-page" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+            <i class="fas fa-chevron-left"></i>
+            Previous
+        </button>
+
+        <span class="page-info">
+            Page {{ currentPage }} of {{ totalPages }}
+        </span>
+
+        <button class="btn-page" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+            Next
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div>

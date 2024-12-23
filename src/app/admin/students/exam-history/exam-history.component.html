@@ -1,0 +1,62 @@
+<div class="history-wrapper">
+    <app-header [title]="'Student Exam History'" [subtitle]="'View student\'s examination records'" 
+    [icon]="'fas fa-history'"
+    [buttons]="[
+            { label: 'Back to Students', icon: 'arrow-left', action: 'back' }
+        ]" (buttonClick)="onHeaderAction($event)">
+    </app-header>
+
+    <div class="error-message" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ errorMessage }}
+        <button class="close-error" (click)="errorMessage = ''">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="loading-state" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Loading exam history...</p>
+    </div>
+
+    <div class="content" *ngIf="!isLoading">
+        <div class="empty-state" *ngIf="examHistory.length === 0">
+            <i class="fas fa-clipboard-list"></i>
+            <p>No exam history found</p>
+            <p class="secondary-text">This student hasn't taken any exams yet</p>
+        </div>
+
+        <div class="table-container" *ngIf="examHistory.length > 0">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-book"></i> Subject</th>
+                        <th><i class="fas fa-file-alt"></i> Exam Name</th>
+                        <th><i class="fas fa-calendar-alt"></i> Date Taken</th>
+                        <th><i class="fas fa-percentage"></i> Score</th>
+                        <th><i class="fas fa-check-circle"></i> Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let exam of examHistory">
+                        <td>{{ exam.subjectName }}</td>
+                        <td>{{ exam.examName }}</td>
+                        <td>{{ exam.dateTimeTaken | date:'medium' }}</td>
+                        <td>
+                            <span class="score-badge" [class.high-score]="exam.score >= 90"
+                                [class.medium-score]="exam.score >= exam.passScore && exam.score < 90"
+                                [class.low-score]="exam.score < exam.passScore">
+                                {{ exam.score }}%
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-badge" [class.passed]="exam.isPassed" [class.failed]="!exam.isPassed">
+                                {{ exam.isPassed ? 'PASSED' : 'FAILED' }}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+<div class="dashboard-wrapper">
+    <div class="dashboard-header">
+        <div class="header-top">
+            <div class="header-actions">
+                <div class="user-info">
+                    <span>Welcome, {{ userName }}</span>
+                </div>
+                <div class="logo-section">
+                    <img src="/png.png" alt="Logo" class="logo">
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-secondary" (click)="viewExamHistory()">
+                        <i class="fas fa-history"></i> View Exam History
+                    </button>
+                    <button class="btn-danger" (click)="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+        <h2>Student Dashboard</h2>
+    </div>
+
+    <div class="dashboard-content">
+        <div class="subjects-panel">
+            <div class="panel-header">
+                <h3>Subjects</h3>
+            </div>
+            <div class="subjects-list">
+                <button *ngFor="let subject of subjects; let first = first" class="subject-card"
+                    (click)="selectSubject(subject.subjectId)" [class.active]="selectedSubjectId === subject.subjectId"
+                    [attr.aria-selected]="selectedSubjectId === subject.subjectId"
+                    [class.auto-select]="first && !selectedSubjectId && selectSubject(subject.subjectId)">
+                    <i class="fas fa-book"></i>
+                    <span>{{ subject.subjectName }}</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="exams-panel" *ngIf="selectedSubjectId">
+            <div class="panel-header">
+                <h3>Available Exams</h3>
+            </div>
+
+            <div class="table-container">
+                <table class="exams-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th> <i class="fas fa-file-alt"></i> Exam Name</th>
+                            <th><i class="fas fa-clock"></i> Time Limit</th>
+                            <th><i class="fas fa-percent"></i> Pass Score</th>
+                            <th><i class="fas fa-cog"></i> Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let exam of exams; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ exam.examName }}</td>
+                            <td>{{ exam.timeLimit.split(':')[0] }}h {{ exam.timeLimit.split(':')[1] }}m</td>
+                            <td>{{ exam.passScore }}%</td>
+                            <td>
+                                <button class="btn-start" (click)="startExam(exam.examId)">Start Exam</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button class="btn-page" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+                <button class="btn-page" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,116 @@
+<div class="add-wrapper">
+
+    <app-header [title]="'Add New Exam'" [subtitle]="'Create a new examination'" 
+    [icon]="'fas fa-plus-circle'"
+    [buttons]="[
+        { label: 'Back to Exams', icon: 'arrow-left', action: 'cancel' }
+      ]" (buttonClick)="onHeaderAction($event)">
+    </app-header>
+
+    <div class="error-message" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ errorMessage }}
+        <button class="close-error" (click)="errorMessage = ''">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="form-container" [class.loading]="loading">
+        <form [formGroup]="examForm" (ngSubmit)="onSubmit()">
+            <div class="form-section">
+                <h3>Basic Information</h3>
+                <div class="form-group">
+                    <label for="examName">Exam Name</label>
+                    <input type="text" id="examName" formControlName="examName" class="form-control"
+                        [class.is-invalid]="examForm.get('examName')?.invalid && examForm.get('examName')?.touched"
+                        placeholder="Enter exam name">
+                    <div class="error-feedback"
+                        *ngIf="examForm.get('examName')?.invalid && examForm.get('examName')?.touched">
+                        <span *ngIf="examForm.get('examName')?.errors?.['required']">Exam name is required</span>
+                        <span *ngIf="examForm.get('examName')?.errors?.['minlength']">Name must be at least 3
+                            characters</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="subjectId">Subject</label>
+                    <select id="subjectId" formControlName="subjectId" class="form-control"
+                        (change)="onSubjectChange($event)"
+                        [class.is-invalid]="examForm.get('subjectId')?.invalid && examForm.get('subjectId')?.touched">
+                        <option value="">Select a subject</option>
+                        <option *ngFor="let subject of subjects" [value]="subject.subjectId">
+                            {{ subject.subjectName }}
+                        </option>
+                    </select>
+                    <div class="error-feedback"
+                        *ngIf="examForm.get('subjectId')?.invalid && examForm.get('subjectId')?.touched">
+                        Please select a subject
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="timeLimit">Time Limit (HH:MM:SS)</label>
+                        <input type="text" id="timeLimit" formControlName="timeLimit" class="form-control"
+                            [class.is-invalid]="examForm.get('timeLimit')?.invalid && examForm.get('timeLimit')?.touched"
+                            placeholder="00:30:00">
+                        <div class="error-feedback"
+                            *ngIf="examForm.get('timeLimit')?.invalid && examForm.get('timeLimit')?.touched">
+                            Please enter a valid time format (HH:MM:SS)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passScore">Pass Score (%)</label>
+                        <input type="number" id="passScore" formControlName="passScore" class="form-control"
+                            [class.is-invalid]="examForm.get('passScore')?.invalid && examForm.get('passScore')?.touched"
+                            placeholder="Enter pass score">
+                        <div class="error-feedback"
+                            *ngIf="examForm.get('passScore')?.invalid && examForm.get('passScore')?.touched">
+                            Score must be between 0 and 100
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Select Questions</h3>
+                <div class="questions-container" *ngIf="questions.length > 0">
+                    <div class="question-card" *ngFor="let question of questions"
+                        [class.selected]="selectedQuestions.includes(question.questionId)"
+                        (click)="onQuestionSelect(question.questionId)">
+                        <div class="question-select">
+                            <div class="checkbox-wrapper">
+                                <i class="fas" [class.fa-check-circle]="selectedQuestions.includes(question.questionId)"
+                                    [class.fa-circle]="!selectedQuestions.includes(question.questionId)"></i>
+                            </div>
+                            <div class="question-text">{{ question.questionText }}</div>
+                        </div>
+                        <div class="choices-preview">
+                            <div class="choice-preview" *ngFor="let choice of question.choices"
+                                [class.correct-choice]="choice.isCorrect">
+                                {{ choice.choiceText }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="no-questions" *ngIf="examForm.get('subjectId')?.value && questions.length === 0">
+                    <i class="fas fa-info-circle"></i>
+                    No questions available for this subject
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" (click)="cancel()">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button type="submit" class="btn-save"
+                    [disabled]="!examForm.valid || selectedQuestions.length === 0 || loading">
+                    <i class="fas fa-save"></i>
+                    Create Exam
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

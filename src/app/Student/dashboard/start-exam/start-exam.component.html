@@ -1,0 +1,72 @@
+<div class="exam-wrapper">
+    <!-- Timer Bar -->
+    <div class="timer-bar" [class.warning]="remainingTime <= 300">
+        <div class="timer">
+            <i class="fas fa-clock"></i>
+            <span>{{ formatTime(remainingTime) }}</span>
+        </div>
+    </div>
+
+    <!-- Exam Content -->
+    <div class="exam-container" *ngIf="!showResults">
+        <!-- Header -->
+        <app-header [title]="'Exam Questions'" [subtitle]="'Choose the correct answer for each question'"
+            [icon]="'fas fa-file-alt'">
+        </app-header>
+
+
+        <!-- Questions -->
+        <div class="questions-container">
+            <div class="question-card" *ngFor="let question of questions; let i = index">
+                <div class="question-header">
+                    <span class="question-number">Question {{ i + 1 }}</span>
+                </div>
+                <p class="question-text">{{ question.questionText }}</p>
+                <div class="choices-container">
+                    <div class="choice-item" *ngFor="let choice of question.choices.$values"
+                        [class.selected]="isChoiceSelected(question.questionId, choice.choiceId)"
+                        (click)="selectAnswer(question.questionId, choice.choiceId)">
+                        <div class="choice-marker"></div>
+                        <span class="choice-text">{{ choice.choiceText }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="action-buttons">
+            <button class="btn-back" (click)="goToHome()">
+                <i class="fas fa-arrow-left"></i>
+                Back to Dashboard
+            </button>
+            <button class="btn-submit" [disabled]="isSubmitting" (click)="submitExam()">
+                <i class="fas fa-paper-plane"></i>
+                Submit Exam
+            </button>
+        </div>
+    </div>
+
+    <!-- Results View -->
+    <div class="results-container" *ngIf="showResults">
+        <div class="results-card">
+            <div class="result-icon" [class.passed]="isPassed" [class.failed]="!isPassed">
+                <i class="fas" [class.fa-check-circle]="isPassed" [class.fa-times-circle]="!isPassed"></i>
+            </div>
+            <h2>Exam Results</h2>
+            <div class="score-info">
+                <div class="score-item">
+                    <span class="label">Your Score</span>
+                    <span class="value">{{ examScore }}%</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">Passing Score</span>
+                    <span class="value">{{ passingScore }}%</span>
+                </div>
+            </div>
+            <div class="status-badge" [class.passed]="isPassed" [class.failed]="!isPassed">
+                {{ isPassed ? 'PASSED' : 'FAILED' }}
+            </div>
+            <button class="btn-home" (click)="goToHome()">Back to Dashboard</button>
+        </div>
+    </div>
+</div>

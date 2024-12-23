@@ -1,0 +1,21 @@
+<div class="header">
+    <div class="title-section">
+        <h1>
+            <i *ngIf="icon" class="fas fa-{{ icon }}"></i>
+            {{ title }}
+        </h1>
+        <p class="subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+    </div>
+
+    <div class="logo-section" (click)="onButtonClick('dashboard')">
+        <img src="/png.png" alt="Logo" class="logo">
+    </div>
+
+    <div class="header-actions">
+        <button *ngFor="let button of buttons" class="btn-header" [class.btn-danger]="button.action === 'logout'"
+            [class.btn-secondary]="button.action !== 'logout'" (click)="onButtonClick(button.action)">
+            <i class="fas fa-{{ button.icon }}"></i>
+            {{ button.label }}
+        </button>
+    </div>
+</div>
