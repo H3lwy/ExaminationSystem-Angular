@@ -5,58 +5,174 @@
             <h1>Create Account</h1>
             <p>Fill in your information to get started</p>
         </div>
-
+ 
         <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
             <div class="form-grid">
                 <div class="form-group">
                     <label for="firstName">First Name</label>
-                    <input type="text" id="firstName" name="firstName" [(ngModel)]="registerData.firstName" required
-                        class="form-control" placeholder="Enter your first name">
+                    <input type="text" id="firstName" name="firstName" 
+                           [(ngModel)]="registerData.firstName"
+                           #firstName="ngModel"
+                           required minlength="2"
+                           class="form-control"
+                           [class.is-invalid]="firstName.invalid && firstName.touched"
+                           placeholder="Enter your first name">
+                    <div class="error-feedback" *ngIf="firstName.invalid && firstName.touched">
+                        <span *ngIf="firstName.errors?.['required']">First name is required</span>
+                        <span *ngIf="firstName.errors?.['minlength']">Name must be at least 2 characters</span>
+                    </div>
                 </div>
-
+ 
                 <div class="form-group">
                     <label for="lastName">Last Name</label>
-                    <input type="text" id="lastName" name="lastName" [(ngModel)]="registerData.lastName" required
-                        class="form-control" placeholder="Enter your last name">
+                    <input type="text" id="lastName" name="lastName"
+                           [(ngModel)]="registerData.lastName"
+                           #lastName="ngModel"
+                           required minlength="2"
+                           class="form-control"
+                           [class.is-invalid]="lastName.invalid && lastName.touched"
+                           placeholder="Enter your last name">
+                    <div class="error-feedback" *ngIf="lastName.invalid && lastName.touched">
+                        <span *ngIf="lastName.errors?.['required']">Last name is required</span>
+                        <span *ngIf="lastName.errors?.['minlength']">Name must be at least 2 characters</span>
+                    </div>
                 </div>
-
+ 
                 <div class="form-group full-width">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" [(ngModel)]="registerData.email" required
-                        class="form-control" placeholder="Enter your email address">
-                </div>
-
-                <div class="form-group full-width">
+                    <input 
+                      type="email" 
+                      id="email" 
+                      name="email"
+                      [(ngModel)]="registerData.email"
+                      #email="ngModel"
+                      required 
+                      email
+                      class="form-control"
+                      [class.is-invalid]="(email.invalid && email.touched) || emailInUse"
+                      placeholder="Enter your email address"
+                      (blur)="onEmailBlur()"
+                    >
+                    <div class="error-feedback" *ngIf="email.invalid && email.touched">
+                      <span *ngIf="email.errors?.['required']">Email is required</span>
+                      <span *ngIf="email.errors?.['email']">Please enter a valid email address</span>
+                    </div>
+                    <div class="error-feedback" *ngIf="emailInUse">
+                      This email is already in use. Please choose another one.
+                    </div>
+                    <div class="loading-indicator" *ngIf="checkingEmail">Checking email availability...</div>
+                  </div>
+ 
+                  <div class="form-group full-width">
                     <label for="userName">Username</label>
-                    <input type="text" id="userName" name="userName" [(ngModel)]="registerData.userName" required
-                        class="form-control" placeholder="Choose a username">
-                </div>
-
+                    <input 
+                      type="text" 
+                      id="userName"
+                      name="userName"
+                      [(ngModel)]="registerData.userName"
+                      #userName="ngModel"
+                      required 
+                      minlength="3"
+                      class="form-control"
+                      [class.is-invalid]="(userName.invalid && userName.touched) || userNameInUse"
+                      placeholder="Choose a username"
+                      (blur)="onUserNameBlur()"
+                    >
+                    <div class="error-feedback" *ngIf="userName.invalid && userName.touched">
+                      <span *ngIf="userName.errors?.['required']">Username is required</span>
+                      <span *ngIf="userName.errors?.['minlength']">Username must be at least 3 characters</span>
+                    </div>
+                    <div class="error-feedback" *ngIf="userNameInUse">
+                      This username is already taken. Please choose another one.
+                    </div>
+                    <div class="loading-indicator" *ngIf="checkingUserName">Checking username availability...</div>
+                  </div>
+ 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" [(ngModel)]="registerData.password" required
-                        class="form-control" placeholder="Create a strong password">
+                    <input type="password" id="password" name="password"
+                           [(ngModel)]="registerData.password"
+                           (input)="checkPasswordStrength()"
+                           (focus)="showPasswordRequirements = true"
+                           #password="ngModel"
+                           required 
+                           class="form-control"
+                           [class.is-invalid]="password.invalid && password.touched"
+                           placeholder="Create a strong password">
+                    
+                    <div class="password-requirements" *ngIf="showPasswordRequirements">
+                        <p class="requirement-title">Password must contain:</p>
+                        <ul>
+                            <li [class.met]="hasMinLength">
+                                <i class="fas" [class.fa-check]="hasMinLength" [class.fa-times]="!hasMinLength"></i>
+                                At least 6 characters
+                            </li>
+                            <li [class.met]="hasUpperCase">
+                                <i class="fas" [class.fa-check]="hasUpperCase" [class.fa-times]="!hasUpperCase"></i>
+                                One uppercase letter
+                            </li>
+                            <li [class.met]="hasLowerCase">
+                                <i class="fas" [class.fa-check]="hasLowerCase" [class.fa-times]="!hasLowerCase"></i>
+                                One lowercase letter
+                            </li>
+                            <li [class.met]="hasNumber">
+                                <i class="fas" [class.fa-check]="hasNumber" [class.fa-times]="!hasNumber"></i>
+                                One number
+                            </li>
+                            <li [class.met]="hasSpecialChar">
+                                <i class="fas" [class.fa-check]="hasSpecialChar" [class.fa-times]="!hasSpecialChar"></i>
+                                One special character (!#$%^&*)
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password</label>
                     <input type="password" id="confirmPassword" name="confirmPassword"
-                        [(ngModel)]="registerData.confirmPassword" required class="form-control"
-                        placeholder="Repeat your password">
+                           [(ngModel)]="registerData.confirmPassword"
+                           #confirmPassword="ngModel"
+                           required
+                           class="form-control"
+                           [class.is-invalid]="confirmPassword.touched && registerData.password !== registerData.confirmPassword"
+                           placeholder="Repeat your password">
+                    <div class="error-feedback" *ngIf="confirmPassword.touched && registerData.password !== registerData.confirmPassword">
+                        Passwords do not match
+                    </div>
                 </div>
             </div>
-
+ 
             <div *ngIf="errorMessage" class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
                 {{ errorMessage }}
             </div>
-
-            <button type="submit" class="register-button" [disabled]="!registerForm.valid">
-                Create Account
-            </button>
+ 
+            <button type="submit" class="register-button" 
+        [disabled]="!registerForm.valid || !isPasswordValid() || registerData.password !== registerData.confirmPassword">
+    Create Account
+</button>
         </form>
-
+ 
         <div class="login-prompt">
             Already have an account? <a href="/login">Sign in</a>
         </div>
+ 
+        <div class="confirmation-modal" *ngIf="showConfirmationModal">
+            <div class="modal-content">
+                <div class="modal-icon">
+                    <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <h2>Verification Email Sent!</h2>
+                <p>We've sent a verification link to <strong>{{ registerData.email }}</strong></p>
+                <p class="sub-text">Please check your inbox and click the link to verify your account.</p>
+                <div class="modal-actions">
+                    <button class="primary-button" href="/login">
+                        Go to Login
+                    </button>
+                    <button class="secondary-button" (click)="closeModal()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+ </div>

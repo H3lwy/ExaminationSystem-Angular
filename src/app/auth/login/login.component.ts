@@ -55,13 +55,13 @@ export class LoginComponent {
 
         if (error.status === 403) {
           this.errorMessage = 'Account is locked. Please contact support.';
+        } else if (error.status === 401 ) {
+          this.errorMessage = 'Your email is not confirmed. Please check your email to confirm your account.';
         } else if (error.status === 400) {
-          this.errorMessage =
-            'Email or password is incorrect. Please try again.';
-        } else {
-          this.errorMessage =
-            'An unexpected error occurred. Please try again later.';
-        }
+          this.errorMessage = 'Email or password is incorrect. Please try again.';
+        }else{
+          this.errorMessage = 'An unexpected error occurred. Please try again later.';
+        }       
       },
     });
   }

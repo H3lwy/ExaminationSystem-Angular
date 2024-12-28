@@ -167,6 +167,37 @@ export class AuthService {
     }
   }
 
+  checkUserAvailability(email: string | null | undefined, userName: string | null | undefined): Observable<any> {
+    const params: any = {};
+    if (email) params['email'] = email;
+    if (userName) params['userName'] = userName;
+
+    return this.http.get(`${this.apiUrl}/CheckUserAvailability?`, { params });
+}
+
+  confirmEmail(data: { email: string; token: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/HandleEmailConfirmation`, {
+      email: data.email,
+      token: data.token,
+      actionType: 'Confirm',
+    });
+  }
+
+  sendConfirmationEmail(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/HandleEmailConfirmation`, {
+      email,
+    });
+  }
+
+  forgotPassword(data: { email: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/ForgotPassword`, data);
+  }
+
+  resetPassword(data: { email: string; token: string; newPassword: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/ResetPassword`, data);
+  }
+  
+  
   logout(): Observable<any> {
     this.clearTokenAutoLogout();
     return new Observable((observer) => {
@@ -176,4 +207,5 @@ export class AuthService {
       observer.complete();
     });
   }
+
 }

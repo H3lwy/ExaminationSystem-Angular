@@ -1,0 +1,33 @@
+<div class="confirmation-wrapper">
+    <div class="confirmation-container">
+        <div class="message-card success" *ngIf="message">
+            <div class="icon-container">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1>Success!</h1>
+            <p>{{ message }}</p>
+            <button class="btn-primary" routerLink="/login">
+                <i class="fas fa-sign-in-alt"></i>
+                Continue to Login
+            </button>
+        </div>
+
+        <div class="message-card error" *ngIf="errorMessage">
+            <div class="icon-container">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <h1>Oops!</h1>
+            <p>{{ errorMessage }}</p>
+            <button class="btn-secondary" (click)="resendEmail()" *ngIf="email">
+                <i class="fas fa-paper-plane"></i>
+                Resend Confirmation Email
+            </button>
+        </div>
+
+        <div class="message-card loading" *ngIf="!message && !errorMessage">
+            <div class="spinner"></div>
+            <h1>Confirming Your Email</h1>
+            <p>Please wait while we verify your email address...</p>
+        </div>
+    </div>
+</div>

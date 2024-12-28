@@ -24,13 +24,19 @@ import { NotfoundComponent } from './app/notfound/notfound.component';
 // Guards
 import { AdminGuard } from './app/services/Guards/admin.guard';
 import { StudentGuard } from './app/services/Guards/student.guard';
+import { ForgotPasswordComponent } from './app/auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './app/auth/forgot-password/password-reset/password-reset.component';
+import { EmailConfirmationComponent } from './app/auth/email-confirmation/email-confirmation.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'confirm-email', component: EmailConfirmationComponent},
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'notfound', component: NotfoundComponent},
+  { path: 'reset-password', component: ResetPasswordComponent},
   {
     path: 'admin',
     canActivate: [AdminGuard],
